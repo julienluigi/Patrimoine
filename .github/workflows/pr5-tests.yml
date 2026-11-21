@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write
 
 jobs:
   full-suite:
@@ -22,17 +23,29 @@ jobs:
         with:
           node-version: '22'
       - name: Install dependencies
-        run: npm install --ignore-scripts --no-audit --no-fund
+        run: npm install --ignore-scripts --no-audit --no-fund 2>&1 | tee full-suite.log
+        shell: bash
       - name: Run the full test suite
+        id: tests
+        continue-on-error: true
         shell: bash
         run: |
           set -o pipefail
-          npm test -- --reporter=verbose 2>&1 | tee full-suite.log
-      - name: Retain test log
+          npm test -- --reporter=verbose 2>&1 | tee -a full-suite.log
+      - name: Post a short summary on the internal PR
         if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: full-suite-log
-          path: full-suite.log
-          if-no-files-found: warn
-          retention-days: 3
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          {
+            echo '### Resultat de la suite complete'
+            echo
+            echo "Statut de l'etape de tests : ${{ steps.tests.outcome }}"
+            echo
+            echo '```'
+            grep -E 'FAIL|AssertionError|Error|Test Files|Tests ' full-suite.log | head -n 80
+            echo '```'
+          } > summary.md
+          PR=$(gh pr list --repo "$GITHUB_REPOSITORY" --head ci/pr5-tests --json number --jq '.[0].number')
+          gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body-file summary.md
