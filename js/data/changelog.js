@@ -2,6 +2,25 @@
 // La clé doit correspondre à APP_VERSION (mon-patrimoine.js). Sans entrée pour la version courante, aucun popup.
 
 const CHANGELOG = {
+  '1.11.116': [
+    { type:'new', text:"Comptes, Recherche et Analyse titrés par leur nom ; la barre du bas reste affichée sur tous les modules." },
+    { type:'new', text:"Grande classe « Fonds euros », distincte de la Bourse (Accueil et Analyse)." },
+    { type:'new', text:"Liste des comptes plus lisible (sous-titre court, part du patrimoine indiquée) ; lignes de positions sans boutons : les actions (favori, mouvement, modifier, supprimer) sont dans la fiche du titre." },
+    { type:'fix', text:"Plus de « -0,00 % » en rouge ; pourcentages de l'Analyse toujours visibles ; étiquette du PRU qui ne chevauche plus le cours ; immobilier vide sans totaux à zéro ; nom du profil vide par défaut." },
+  ],
+  '1.11.115': [
+    { type:'new', text:"Accueil : camembert des grandes classes d'actifs, qui ouvre l'Analyse." },
+    { type:'new', text:"Analyse : la projection du patrimoine (1 à 20 ans) y est maintenant, au lieu de l'écran DCA." },
+    { type:'new', text:"Ordres : affichage plus compact, nom du titre, montant total et écart restant jusqu'au prix limite ou au seuil d'alerte." },
+    { type:'new', text:"Menu ☰ : date de la dernière sauvegarde toujours visible ; un toucher sauvegarde." },
+    { type:'fix', text:"Écrans de module (DCA, Ordres, Immobilier, Assistant, Réglages, Non synchro) : titrés par leur nom, sans « Retour »." },
+  ],
+  '1.11.114': [
+    { type:'new', text:"Sauvegarde complète (Réglages) : tous les modules, enregistrée dans le dossier de votre choix (OneDrive, Drive, Fichiers…), restauration d'un fichier, et rappel à l'ouverture si la dernière sauvegarde a plus de 10 jours." },
+    { type:'new', text:"Non synchro : positions dont le cours est trop ancien ou de date inconnue, avec pastille ; option « Cours saisi à la main »." },
+    { type:'new', text:"Écran d'un compte allégé : la rangée P&L Total / Performance / Variation J est retirée." },
+    { type:'fix', text:"Menu ☰ accessible depuis tous les écrans ; un seul nom par module ; mise à jour qui recharge proprement l'application." },
+  ],
   '1.11.113': [
     { type:'new', text:"Ordres et alertes (menu ☰ ou barre du bas) : ordres limites en cours avec confirmation d'exécution (ajoute le mouvement au compte) et alertes de prix, séparés entre mode démo et réel, avec pastille de compteur." },
     { type:'new', text:"Immobilier : biens (résidence principale, secondaire, locatif), valeur estimée, crédit, tableau d'amortissement. Le patrimoine net de l'Accueil et de l'Analyse intègre l'immobilier ; la carte « Comptes financiers » ne montre plus le patrimoine net." },
