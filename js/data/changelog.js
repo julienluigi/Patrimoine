@@ -2,6 +2,9 @@
 // La clé doit correspondre à APP_VERSION (mon-patrimoine.js). Sans entrée pour la version courante, aucun popup.
 
 const CHANGELOG = {
+  '1.11.118': [
+    { type:'fix', text:"Noms longs affichés en entier (légendes de l'Analyse, relevé des mouvements) ; marqueurs d'achat / vente entiers au bord du graphique d'un titre." },
+  ],
   '1.11.117': [
     { type:'fix', text:"Performance YTD : « — » au lieu d'un faux 0 % quand aucun cours au 31 décembre n'est connu (récupère l'historique depuis la fiche titre). En mode démo, les comptes ont des performances de démonstration." },
   ],
