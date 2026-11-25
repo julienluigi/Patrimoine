@@ -2,6 +2,9 @@
 // La clé doit correspondre à APP_VERSION (mon-patrimoine.js). Sans entrée pour la version courante, aucun popup.
 
 const CHANGELOG = {
+  '1.11.117': [
+    { type:'fix', text:"Performance YTD : « — » au lieu d'un faux 0 % quand aucun cours au 31 décembre n'est connu (récupère l'historique depuis la fiche titre). En mode démo, les comptes ont des performances de démonstration." },
+  ],
   '1.11.116': [
     { type:'new', text:"Comptes, Recherche et Analyse titrés par leur nom ; la barre du bas reste affichée sur tous les modules." },
     { type:'new', text:"Grande classe « Fonds euros », distincte de la Bourse (Accueil et Analyse)." },
