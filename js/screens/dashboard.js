@@ -41,9 +41,9 @@ function renderDash() {
     </div>
     ${S.lastPriceUpdate?`<div style="font-size:10px;color:rgba(255,255,255,.28);margin-top:5px">Cours · ${timeSince(S.lastPriceUpdate)}</div>`:''}
   </div>
-  ${homeWatchHTML()}
-  ${renderPocketCard()}
   ${renderHistCard()}
+  ${renderPocketCard()}
+  ${homeWatchHTML()}
   ${renderWatchlistCard()}`;
 }
 
