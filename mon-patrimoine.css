@@ -597,6 +597,8 @@ html.bgshield #bg-shield{opacity:1;pointer-events:auto}
 
 /* Compte synchronisé (eToro, js/screens/etoro.js) : pas d'ajout ni de suppression de position */
 .acc-synced .hold-add-btn,.acc-synced .hold-del-btn{display:none!important}
+/* bouton « Intérêts » réservé aux livrets (il apparaissait sur tous les comptes) */
+.type-btn.hidden{display:none}
 /* lignes d'aide masquées quand elles sont vides (.hidden n'avait d'effet que sur .form-row) */
 .t-sm.hidden{display:none}
 /* comparaison masquée tant qu'aucune somme n'est saisie */
