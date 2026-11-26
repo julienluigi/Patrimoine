@@ -12,18 +12,6 @@ function accListSub(a) {
 }
 
 // ── COMPTES ──
-// Type de compte court pour la liste : l'abréviation entre parenthèses si elle existe (« Plan d'Épargne en Actions (PEA) » → « PEA »)
-function accTypeShort(type) {
-  const m = /\(([^)]+)\)\s*$/.exec(type || '');
-  return m ? m[1] : (type || '');
-}
-// Sous-titre d'une carte de compte sur une ligne : type (seulement s'il n'est pas déjà dans le nom) · nombre de valeurs · banque
-function accSubtitle(a) {
-  const short = accTypeShort(a.type), name = (a.name || '').toLowerCase(), type = (a.type || '').toLowerCase();
-  const redundant = !short || name.includes(short.toLowerCase()) || type.includes(name);
-  const parts = [redundant ? '' : esc(short), `${a.holdings.length} valeur${a.holdings.length !== 1 ? 's' : ''}`, a.bank ? esc(a.bank) : ''];
-  return parts.filter(Boolean).join(' · ');
-}
 function renderComptes() {
   const w=totalWealth();
   const anim=_skipAccAnim?'':' anim';   // remis à faux en fin de fonction
