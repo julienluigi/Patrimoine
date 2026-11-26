@@ -2,6 +2,10 @@
 // La clé doit correspondre à APP_VERSION (mon-patrimoine.js). Sans entrée pour la version courante, aucun popup.
 
 const CHANGELOG = {
+  '1.11.126': [
+    { type:'new', text:"Ajouter un compte : option « Lier à une API » (eToro), pour tous les types de comptes. La clé publique est pré-remplie, il suffit de coller la clé utilisateur." },
+    { type:'new', text:"Les comptes liés se mettent à jour avec les cours (bouton rafraîchir), par le même proxy." },
+  ],
   '1.11.125': [
     { type:'fix', text:"Type de compte : retour à la liste déroulante à sections." },
   ],
