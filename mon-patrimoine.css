@@ -605,4 +605,4 @@ html.bgshield #bg-shield{opacity:1;pointer-events:auto}
 #er-cmp-box.hidden{display:none}
 
 /* « Supprimer les clés » masqué tant qu'aucune clé n'est enregistrée */
-#et-del.hidden{display:none}
+#et-del.hidden,#acc-sync-box.hidden{display:none}

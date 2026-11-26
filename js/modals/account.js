@@ -97,6 +97,7 @@ function openAccModal(){
   document.getElementById('acc-currency').value='EUR';
   syncAccCurrency('acc-type','acc-currency',true);   // la devise suit le type proposé par défaut
   document.getElementById('acc-obs-tog').classList.remove('on');
+  if(typeof accSyncReset==='function') accSyncReset();   // option « Lier à une API » (js/screens/etoro.js)
   document.getElementById('acc-modal-bg').classList.add('show');
   document.getElementById('acc-modal-sheet').classList.add('show');
   syncAccNamePlaceholder();
@@ -114,7 +115,7 @@ document.getElementById('acc-obs-tog').addEventListener('click',()=>{
   _accObserver=!_accObserver;
   document.getElementById('acc-obs-tog').classList.toggle('on',_accObserver);
 });
-document.getElementById('acc-submit').addEventListener('click',()=>{
+document.getElementById('acc-submit').addEventListener('click',async()=>{
   const icon=document.getElementById('acc-icon').value.trim()||'📊';
   const type=readAccType('acc-type',ACCOUNT_TYPES[0]);
   const bank=document.getElementById('acc-bank').value.trim();
@@ -139,6 +140,7 @@ document.getElementById('acc-submit').addEventListener('click',()=>{
   }
   const acc={id,name,type,bank,icon,iconBg,currency,value:0,change1d:0,holdings:[],cashflows,observer:_accObserver,...(startDate?{startDate}:{}),...(share<100?{share}:{}),...(rate!=null?{rate}:{})};
   acc.value=accTotal(acc);
+  if(typeof accSyncCreate==='function'&&await accSyncCreate(acc)) return;   // compte lié à une API : créé seulement si l'API répond (js/screens/etoro.js)
   S.accounts.push(acc);
   closeAccModal();
   refreshMain();
