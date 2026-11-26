@@ -2,8 +2,11 @@
 // La clé doit correspondre à APP_VERSION (mon-patrimoine.js). Sans entrée pour la version courante, aucun popup.
 
 const CHANGELOG = {
+  '1.11.125': [
+    { type:'fix', text:"Type de compte : retour à la liste déroulante à sections." },
+  ],
   '1.11.124': [
-    { type:'new', text:"Création d'un compte : types en catégories repliables, nom proposé si tu n'en saisis pas (ex. « Livret A », « Compte-titres Boursorama »)." },
+    { type:'new', text:"Création d'un compte : nom proposé si tu n'en saisis pas (ex. « Livret A », « Compte-titres Boursorama »)." },
     { type:'new', text:"Compte joint : la part n'est proposée que pour le compte-titres et l'assurance-vie ; PEA, livrets, PER… ont un seul titulaire et comptent à 100 %." },
     { type:'new', text:"Un seul PEA, PEA-PME, Livret A, LDDS, LEP et Livret Jeune par personne (deux PEL / CEL) ; un doublon existant est signalé dans « À surveiller »." },
     { type:'fix', text:"Livrets : le plafond se calcule sur le solde, intérêts compris, à la date du versement (22 000 € + 200 € d'intérêts → plus que 750 € à verser sur un Livret A)." },
