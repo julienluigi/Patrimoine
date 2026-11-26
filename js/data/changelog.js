@@ -2,6 +2,10 @@
 // La clé doit correspondre à APP_VERSION (mon-patrimoine.js). Sans entrée pour la version courante, aucun popup.
 
 const CHANGELOG = {
+  '1.11.120': [
+    { type:'new', text:"Livrets et comptes d'épargne simplifiés (Livret A, LDDS, LEP, Livret Jeune, PEL / CEL, compte à terme, compte courant) : solde, taux, intérêts estimés, versements, retraits et intérêts reçus — sans titres." },
+    { type:'new', text:"Plafond de versements respecté : un versement au-delà est refusé ; les intérêts, saisis à part, peuvent le dépasser. À la création, le solde au-delà du plafond est compté comme intérêts." },
+  ],
   '1.11.119': [
     { type:'new', text:"Plusieurs crédits par bien immobilier (prêt principal, PTZ…), chacun avec son tableau d'amortissement, et assurance saisie en €/mois." },
     { type:'new', text:"Module « Crédits » pour les autres crédits (consommation, auto, travaux…) : capital restant dû déduit du patrimoine net." },
