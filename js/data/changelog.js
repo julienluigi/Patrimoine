@@ -2,6 +2,14 @@
 // La clé doit correspondre à APP_VERSION (mon-patrimoine.js). Sans entrée pour la version courante, aucun popup.
 
 const CHANGELOG = {
+  '1.11.119': [
+    { type:'new', text:"Plusieurs crédits par bien immobilier (prêt principal, PTZ…), chacun avec son tableau d'amortissement, et assurance saisie en €/mois." },
+    { type:'new', text:"Module « Crédits » pour les autres crédits (consommation, auto, travaux…) : capital restant dû déduit du patrimoine net." },
+    { type:'new', text:"Quotes-parts : part d'un compte joint et part d'un bien (propriété et dette séparées) ; les totaux comptent votre part." },
+    { type:'new', text:"Enveloppes fiscales dans le compte : date des 5 ans du PEA, des 8 ans de l'assurance-vie, plafonds de versements des PEA et livrets." },
+    { type:'new', text:"Accueil cliquable (Comptes, Immobilier, Crédits) et bloc « À surveiller » : alertes, ordres, échéances, sauvegarde, positions non synchronisées, jalons fiscaux." },
+    { type:'new', text:"Simulation de remboursement anticipé (total ou partiel, indemnités au plafond légal ou du contrat) et comparaison « rembourser ou placer » avec rendement d'équilibre." },
+  ],
   '1.11.118': [
     { type:'fix', text:"Noms longs affichés en entier (légendes de l'Analyse, relevé des mouvements) ; marqueurs d'achat / vente entiers au bord du graphique d'un titre." },
   ],
