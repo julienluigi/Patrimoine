@@ -2,6 +2,9 @@
 // La clé doit correspondre à APP_VERSION (mon-patrimoine.js). Sans entrée pour la version courante, aucun popup.
 
 const CHANGELOG = {
+  '1.11.128': [
+    { type:'new', text:"Type de compte : nouvelle fenêtre de choix, avec une couleur par catégorie (bourse, retraite, livrets), des noms courts et le taux des livrets." },
+  ],
   '1.11.127': [
     { type:'new', text:"Ajouter un compte : « Mettre à jour via un service », discret sous le bouton. Choisis le service (eToro pour l'instant), colle ta clé, c'est tout." },
     { type:'new', text:"Compte lié : une petite pastille « eToro · il y a 5 min » remplace le bandeau ; touche-la pour synchroniser ou changer la clé." },
