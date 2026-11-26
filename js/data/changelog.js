@@ -2,6 +2,10 @@
 // La clé doit correspondre à APP_VERSION (mon-patrimoine.js). Sans entrée pour la version courante, aucun popup.
 
 const CHANGELOG = {
+  '1.11.129': [
+    { type:'new', text:"Comptes : chaque compte est représenté par la pastille colorée de son type (PEA, AV, Livret A…), dans la liste, sur l'écran du compte et dans la recherche." },
+    { type:'new', text:"Plus de choix d'icône à la création d'un compte : le type suffit. Les livrets affichent leur taux dans la liste." },
+  ],
   '1.11.128': [
     { type:'new', text:"Type de compte : nouvelle fenêtre de choix, avec une couleur par catégorie (bourse, retraite, livrets), des noms courts et le taux des livrets." },
   ],
