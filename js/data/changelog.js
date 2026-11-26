@@ -2,6 +2,9 @@
 // La clé doit correspondre à APP_VERSION (mon-patrimoine.js). Sans entrée pour la version courante, aucun popup.
 
 const CHANGELOG = {
+  '1.11.122': [
+    { type:'new', text:"Création d'un compte : types regroupés en trois catégories (Bourse et crypto, Assurance-vie et retraite, Épargne disponible). SCPI, métaux précieux, compte à terme, compte courant et « Autre… » retirés ; un compte existant garde son type." },
+  ],
   '1.11.121': [
     { type:'new', text:"Trois nouveaux thèmes dans Réglages : Sable (clair et chaud), Émeraude & or (sombre, esprit banque privée) et Graphite (noir pur, accent violet). Les graphiques prennent les couleurs du thème." },
   ],
