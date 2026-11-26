@@ -599,3 +599,5 @@ html.bgshield #bg-shield{opacity:1;pointer-events:auto}
 .acc-synced .hold-add-btn,.acc-synced .hold-del-btn{display:none!important}
 /* lignes d'aide masquées quand elles sont vides (.hidden n'avait d'effet que sur .form-row) */
 .t-sm.hidden{display:none}
+/* comparaison masquée tant qu'aucune somme n'est saisie */
+#er-cmp-box.hidden{display:none}
