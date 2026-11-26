@@ -594,3 +594,6 @@ html.bgshield #bg-shield{opacity:1;pointer-events:auto}
 .er-grid>.er-l{color:var(--text2)}
 .er-grid>.t-num,.er-grid>b:not(:first-child){text-align:right}
 .er-sens{grid-template-columns:1fr 1fr;margin-top:12px}
+
+/* Compte synchronisé (eToro, js/screens/etoro.js) : pas d'ajout ni de suppression de position */
+.acc-synced .hold-add-btn,.acc-synced .hold-del-btn{display:none!important}
