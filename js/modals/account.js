@@ -97,7 +97,7 @@ function openAccModal(){
   document.getElementById('acc-currency').value='EUR';
   syncAccCurrency('acc-type','acc-currency',true);   // la devise suit le type proposé par défaut
   document.getElementById('acc-obs-tog').classList.remove('on');
-  if(typeof accSyncReset==='function') accSyncReset();   // option « Lier à une API » (js/screens/etoro.js)
+  if(typeof linkedAccReset==='function') linkedAccReset();   // « Mettre à jour via un service » (js/screens/linked.js)
   document.getElementById('acc-modal-bg').classList.add('show');
   document.getElementById('acc-modal-sheet').classList.add('show');
   syncAccNamePlaceholder();
@@ -140,7 +140,7 @@ document.getElementById('acc-submit').addEventListener('click',async()=>{
   }
   const acc={id,name,type,bank,icon,iconBg,currency,value:0,change1d:0,holdings:[],cashflows,observer:_accObserver,...(startDate?{startDate}:{}),...(share<100?{share}:{}),...(rate!=null?{rate}:{})};
   acc.value=accTotal(acc);
-  if(typeof accSyncCreate==='function'&&await accSyncCreate(acc)) return;   // compte lié à une API : créé seulement si l'API répond (js/screens/etoro.js)
+  if(typeof linkedAccCreate==='function'&&await linkedAccCreate(acc)) return;   // compte lié à un service : créé seulement si le service répond (js/screens/linked.js)
   S.accounts.push(acc);
   closeAccModal();
   refreshMain();
@@ -155,7 +155,7 @@ function deleteAccount(accId){
   const acc=S.accounts.find(a=>a.id===accId); if(!acc) return;
   openConfirm(`Supprimer le compte "${acc.name}" ?`,()=>{
     S.accounts=S.accounts.filter(a=>a.id!==accId);
-    etoroKeysDelete(accId);   // clés d'un compte eToro synchronisé : effacées de l'appareil avec le compte
+    linkedKeysDelete(accId);   // clé d'un compte lié à un service : effacée de l'appareil avec le compte
     if(S.screen==='account'&&S.accountId===accId) back();
     refreshMain();
     toast('Compte supprimé');
