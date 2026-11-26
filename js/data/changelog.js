@@ -5,6 +5,8 @@ const CHANGELOG = {
   '1.11.120': [
     { type:'new', text:"Livrets et comptes d'épargne simplifiés (Livret A, LDDS, LEP, Livret Jeune, PEL / CEL, compte à terme, compte courant) : solde, taux, intérêts estimés, versements, retraits et intérêts reçus — sans titres." },
     { type:'new', text:"Plafond de versements respecté : un versement au-delà est refusé ; les intérêts, saisis à part, peuvent le dépasser. À la création, le solde au-delà du plafond est compté comme intérêts." },
+    { type:'new', text:"Accueil réordonné : patrimoine, évolution, répartition par classe d'actifs, puis « À surveiller »." },
+    { type:'fix', text:"Analyse de nouveau affichée quand les crédits dépassent les actifs (patrimoine net négatif) ; une classe nette négative est signalée." },
   ],
   '1.11.119': [
     { type:'new', text:"Plusieurs crédits par bien immobilier (prêt principal, PTZ…), chacun avec son tableau d'amortissement, et assurance saisie en €/mois." },
