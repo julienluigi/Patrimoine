@@ -597,6 +597,18 @@ html.bgshield #bg-shield{opacity:1;pointer-events:auto}
 
 /* Compte synchronisé (eToro, js/screens/etoro.js) : pas d'ajout ni de suppression de position */
 .acc-synced .hold-add-btn,.acc-synced .hold-del-btn{display:none!important}
+/* Choix du type de compte en catégories repliables (js/modals/account.js : renderAccTypePicker) */
+select.form-input.hidden{display:none}
+.tp{display:flex;flex-direction:column;gap:6px}
+.tp-group{border:1px solid var(--border);border-radius:12px;background:var(--card);overflow:hidden}
+.tp-group>summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:11px 14px;font-size:13px;font-weight:800;cursor:pointer}
+.tp-group>summary::-webkit-details-marker{display:none}
+.tp-group>summary::after{content:'▾';color:var(--text3);transition:transform .2s;margin-left:auto}
+.tp-group[open]>summary::after{transform:rotate(180deg)}
+.tp-cur{font-size:12px;font-weight:600;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:55%}
+.tp-group[open] .tp-cur{display:none}
+.tp-opt{padding:10px 14px;border-top:1px solid var(--border);font-size:14px;cursor:pointer;display:flex;justify-content:space-between}
+.tp-opt.on{color:var(--accent);font-weight:700;background:var(--accent-dim)}
 /* bouton « Intérêts » réservé aux livrets (il apparaissait sur tous les comptes) */
 .type-btn.hidden{display:none}
 /* lignes d'aide masquées quand elles sont vides (.hidden n'avait d'effet que sur .form-row) */
