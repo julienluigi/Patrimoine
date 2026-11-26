@@ -2,6 +2,14 @@
 // La clé doit correspondre à APP_VERSION (mon-patrimoine.js). Sans entrée pour la version courante, aucun popup.
 
 const CHANGELOG = {
+  '1.11.124': [
+    { type:'new', text:"Création d'un compte : types en catégories repliables, nom proposé si tu n'en saisis pas (ex. « Livret A », « Compte-titres Boursorama »)." },
+    { type:'new', text:"Compte joint : la part n'est proposée que pour le compte-titres et l'assurance-vie ; PEA, livrets, PER… ont un seul titulaire et comptent à 100 %." },
+    { type:'new', text:"Un seul PEA, PEA-PME, Livret A, LDDS, LEP et Livret Jeune par personne (deux PEL / CEL) ; un doublon existant est signalé dans « À surveiller »." },
+    { type:'fix', text:"Livrets : le plafond se calcule sur le solde, intérêts compris, à la date du versement (22 000 € + 200 € d'intérêts → plus que 750 € à verser sur un Livret A)." },
+    { type:'fix', text:"Livret : seul le solde actuel est affiché en tête (plus de totaux versé / retiré)." },
+    { type:'fix', text:"Les messages longs passent à la ligne et restent dans l'écran ; le bouton « Intérêts » n'apparaît plus que sur les livrets." },
+  ],
   '1.11.123': [
     { type:'new', text:"Compte eToro synchronisé (lecture seule) : « Ou connecter un compte eToro » à la création d'un compte. Solde, positions et copies de traders mis à jour automatiquement ; clés gardées sur l'appareil uniquement." },
   ],
