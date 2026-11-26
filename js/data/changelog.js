@@ -2,6 +2,9 @@
 // La clé doit correspondre à APP_VERSION (mon-patrimoine.js). Sans entrée pour la version courante, aucun popup.
 
 const CHANGELOG = {
+  '1.11.123': [
+    { type:'new', text:"Compte eToro synchronisé (lecture seule) : « Ou connecter un compte eToro » à la création d'un compte. Solde, positions et copies de traders mis à jour automatiquement ; clés gardées sur l'appareil uniquement." },
+  ],
   '1.11.122': [
     { type:'new', text:"Création d'un compte : types regroupés en trois catégories (Bourse et crypto, Assurance-vie et retraite, Épargne disponible). SCPI, métaux précieux, compte à terme, compte courant et « Autre… » retirés ; un compte existant garde son type." },
   ],
