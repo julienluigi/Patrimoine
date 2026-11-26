@@ -2,6 +2,9 @@
 // La clé doit correspondre à APP_VERSION (mon-patrimoine.js). Sans entrée pour la version courante, aucun popup.
 
 const CHANGELOG = {
+  '1.11.121': [
+    { type:'new', text:"Trois nouveaux thèmes dans Réglages : Sable (clair et chaud), Émeraude & or (sombre, esprit banque privée) et Graphite (noir pur, accent violet). Les graphiques prennent les couleurs du thème." },
+  ],
   '1.11.120': [
     { type:'new', text:"Livrets et comptes d'épargne simplifiés (Livret A, LDDS, LEP, Livret Jeune, PEL / CEL, compte à terme, compte courant) : solde, taux, intérêts estimés, versements, retraits et intérêts reçus — sans titres." },
     { type:'new', text:"Plafond de versements respecté : un versement au-delà est refusé ; les intérêts, saisis à part, peuvent le dépasser. À la création, le solde au-delà du plafond est compté comme intérêts." },
