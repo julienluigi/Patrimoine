@@ -2,8 +2,8 @@
 // La clé doit correspondre à APP_VERSION (mon-patrimoine.js). Sans entrée pour la version courante, aucun popup.
 
 const CHANGELOG = {
-  '1.11.132': [
-    { type:'new', text:"Ajouter un compte : « Mettre à jour via un service » (eToro, lecture seule). Ta clé passe par le proxy des cours sans y être gardée." },
+  '1.11.133': [
+    { type:'new', text:"Ajouter un compte : « Mettre à jour via un service » (eToro, lecture seule). La fenêtre remplace la fiche le temps du choix ; ta clé passe par le proxy des cours sans y être gardée." },
     { type:'fix', text:"Graphiques : plus de courbe vide au démarrage de l'appli. Cours : symboles spéciaux (^FCHI, EURUSD=X) correctement transmis." },
     { type:'fix', text:"Changer le type d'un compte : une seule fenêtre à la fois, liste qui défile, types impossibles grisés avec leur raison." },
   ],
