@@ -19,17 +19,11 @@ describe('choix du type de compte', () => {
   it('sections colorées, nom court et précision, coche sur le type choisi', () => {
     const html = T.typePickerHTML("Plan d'Épargne en Actions (PEA)");
     expect([...html.matchAll(/class="tp-head tp-(\w+)"><span class="tp-dot"><\/span>([^<]+)/g)].map(m => [m[1], m[2]]))
-      .toEqual([['bourse', 'Bourse et crypto'], ['retraite', 'Assurance-vie et retraite'], ['livret', 'Livrets et épargne logement']]);
+      .toEqual([['bourse', 'Bourse et crypto'], ['retraite', 'Assurance-vie et retraite'], ['livret', 'Livrets et comptes courants']]);
     expect((html.match(/data-type=/g) || []).length).toBe(R.ACCOUNT_TYPES.length);
     expect(html).toMatch(/class="tp-row tp-bourse on" data-type="Plan d&#39;|class="tp-row tp-bourse on" data-type="Plan d'/);
     expect((html.match(/tp-check/g) || []).length).toBe(1);
     expect(html).toContain('<span class="tp-name">PEA</span><span class="tp-sub">Plan d\'épargne en actions</span>');
-  });
-  it('type impossible pour ce compte : grisé, raison à la place de la précision ; le type actuel ne l\'est jamais', () => {
-    const html = T.typePickerHTML('Compte-Titres Ordinaire', (t, short) => (t === 'Livret A' ? (short ? '3 positions non autorisées' : 'Message complet') : t === 'Compte-Titres Ordinaire' ? 'ignoré' : ''));
-    expect(html).toMatch(/class="tp-row tp-livret off" data-type="Livret A" aria-disabled="true" data-why="Message complet">[\s\S]*?<span class="tp-sub tp-why">3 positions non autorisées<\/span>/);
-    expect((html.match(/ off"/g) || []).length).toBe(1);
-    expect(html).toContain('class="tp-row tp-bourse on" data-type="Compte-Titres Ordinaire"');
   });
   it('livrets : taux en vigueur dans la précision', () => {
     expect(T.accTypeSub('Livret A')).toBe('1,7 % · Livret réglementé');

@@ -30,6 +30,28 @@ describe('cohérence des tables de règles', () => {
   });
 });
 
+describe('Compte courant et Compte épargne Suisse', () => {
+  const CH = 'Compte épargne Suisse', CC = 'Compte courant';
+  it('proposés dans la liste, sans doublon', () => {
+    [CC, CH].forEach(t => expect(R.ACCOUNT_TYPES, t).toContain(t));
+    expect(new Set(R.ACCOUNT_TYPES).size).toBe(R.ACCOUNT_TYPES.length);
+  });
+  it('devise par défaut modifiable : euro pour le compte courant, franc suisse pour l\'épargne suisse', () => {
+    expect(R.ACC_TYPE_CCY[CC]).toEqual(['EUR', false]);
+    expect(R.ACC_TYPE_CCY[CH]).toEqual(['CHF', false]);
+    const opts = ['EUR', 'USD', 'CHF'];
+    expect(R.accCurrencyForType(CH, 'EUR', opts, true)).toEqual({ value: 'CHF', locked: false, reason: '' });
+    expect(R.accCurrencyForType(CH, 'EUR', opts, false).value).toBe('EUR');   // compte existant : jamais modifiée
+  });
+  it('aucun titre : un compte-titres qui en contient ne peut pas devenir l\'un de ces types', () => {
+    [CC, CH].forEach(t => {
+      expect(R.allowedAssetTypes(t), t).toEqual([]);
+      expect(R.assetTypeError({ type: t }, 'ETF'), t).toMatch(/Pas de titres/);
+      expect(R.accTypeViolations({ type: CTO, holdings: [{ ticker: 'CW8', type: 'ETF' }] }, t), t).toHaveLength(1);
+    });
+  });
+});
+
 describe('types d\'actifs autorisés', () => {
   const ok = (type, asset, country) => R.assetTypeError({ type }, asset, country) === '';
   it('limite un compte crypto aux cryptos', () => {
@@ -126,11 +148,12 @@ describe('assetTypeOptions : liste des types d\'actifs d\'un formulaire', () => 
 
 describe('compte joint, nombre de comptes, nom proposé', () => {
   const R2 = loadClassic('js/features/account-rules.js', { exports: ['accJointAllowed', 'accTypeLimitError', 'accTypeLimitProblems', 'accDefaultName', 'ACC_JOINT_TYPES'] });
-  it('détention à plusieurs : compte-titres et assurance-vie seulement (types anciens : autorisé)', () => {
-    expect(R2.ACC_JOINT_TYPES).toEqual([CTO, 'Assurance-Vie']);
+  it('détention à plusieurs : compte-titres, assurance-vie et compte courant seulement (types anciens : autorisé)', () => {
+    expect(R2.ACC_JOINT_TYPES).toEqual([CTO, 'Assurance-Vie', 'Compte courant', 'Compte épargne Suisse']);
     for (const t of [PEA, 'PEA-PME', 'Livret A', 'LDDS', 'LEP', 'Livret Jeune', 'PEL / CEL', "Plan d'Épargne Retraite (PER)", 'Épargne salariale (PEE / PERCO)', 'Pilier 3a', 'Crypto / Exchange'])
       expect(R2.accJointAllowed(t), t).toBe(false);
     expect(R2.accJointAllowed('Compte courant')).toBe(true);
+    expect(R2.accJointAllowed('Tontine familiale')).toBe(true);
   });
   it('un PEA, un PEA-PME, un Livret A, un LDDS, un LEP, un Livret Jeune ; PEL / CEL : deux ; compte modifié et observateurs exclus', () => {
     const accs = [{ id: 'a', type: 'Livret A' }, { id: 'b', type: 'PEL / CEL' }, { id: 'o', type: PEA, observer: true }];
@@ -145,6 +168,8 @@ describe('compte joint, nombre de comptes, nom proposé', () => {
   });
   it('nom proposé : nom court du type, banque, numéro si déjà pris', () => {
     expect(R2.accDefaultName(PEA, '', [])).toBe('PEA');
+    expect(R2.accDefaultName('Compte épargne Suisse', 'UBS', [])).toBe('Épargne Suisse UBS');
+    expect(R2.accDefaultName('Compte courant', '', [])).toBe('Compte courant');
     expect(R2.accDefaultName('Assurance-Vie', 'Linxea', [])).toBe('Assurance-vie Linxea');
     expect(R2.accDefaultName(CTO, '', [{ name: 'compte-titres' }, { name: 'Compte-titres 2' }])).toBe('Compte-titres 3');
   });

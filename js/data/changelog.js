@@ -2,14 +2,35 @@
 // La clé doit correspondre à APP_VERSION (mon-patrimoine.js). Sans entrée pour la version courante, aucun popup.
 
 const CHANGELOG = {
-  '1.11.133': [
-    { type:'new', text:"Ajouter un compte : « Mettre à jour via un service » (eToro, lecture seule). La fenêtre remplace la fiche le temps du choix ; ta clé passe par le proxy des cours sans y être gardée." },
-    { type:'fix', text:"Graphiques : plus de courbe vide au démarrage de l'appli. Cours : symboles spéciaux (^FCHI, EURUSD=X) correctement transmis." },
-    { type:'fix', text:"Changer le type d'un compte : une seule fenêtre à la fois, liste qui défile, types impossibles grisés avec leur raison." },
+  '1.11.134': [
+    { type:'new', text:"Sauvegarde : choisissez où l'enregistrer. Sur téléphone, « Envoyer ou partager » ouvre OneDrive, Gmail, Drive… ; sur ordinateur, « Choisir un dossier » ; partout, « Télécharger »." },
+    { type:'new', text:"Ajouter un compte : « Mettre à jour via un service » (eToro, lecture seule)." },
+  ],
+  '1.11.122': [
+    { type:'fix', text:"Graphiques : si l'application se lance dans une fenêtre pas encore dimensionnée, la courbe ne devient plus invisible (largeur minimale garantie)." },
+  ],
+  '1.11.121': [
+    { type:'fix', text:"Date du jour : un nouvel ordre ou un import CSV sans date prend maintenant la date locale (avant, la veille juste après minuit)." },
+    { type:'fix', text:"Si le stockage de l'appareil est plein, un message prévient que les comptes ne sont pas enregistrés (avant, rien n'était signalé)." },
+  ],
+  '1.11.120': [
+    { type:'fix', text:"Sécurité : ticker, type, pays, secteur et clés API sont maintenant échappés à l'affichage (un fichier CSV ou une sauvegarde piégés ne peuvent plus injecter de code)." },
+  ],
+  '1.11.119': [
+    { type:'new', text:"Nouveau type de compte : « Compte épargne Suisse » (solde, taux, versements, retraits, intérêts ; CHF proposé par défaut, compte joint possible)." },
+  ],
+  '1.11.118': [
+    { type:'fix', text:"Réglages : pastille de couleur et nom du thème alignés à gauche." },
+  ],
+  '1.11.117': [
+    { type:'fix', text:"Réglages : pastilles de thème plus grandes (2 par ligne), le nom ne dépasse plus." },
+  ],
+  '1.11.116': [
+    { type:'fix', text:"Réglages : les pastilles de thème ont toutes la même taille." },
   ],
   '1.11.115': [
-    { type:'fix', text:"Changer le type d'un compte : la liste des types s'ouvrait derrière la fiche « Modifier » et bloquait l'écran. Elle la remplace maintenant le temps du choix, défile au doigt jusqu'au dernier type, puis la fiche revient avec le type choisi." },
-    { type:'fix', text:"Un type impossible pour ce compte est grisé avec sa raison (ex. un compte-titres avec des actions ne peut pas devenir un Livret A ; un seul Livret A par personne) ; les autres types restent accessibles. Un compte vide peut prendre n'importe quel type." },
+    { type:'fix', text:"Modification d'un compte : la fenêtre de choix du type s'ouvrait derrière la fenêtre de modification, impossible de sélectionner un type." },
+    { type:'new', text:"Nouveau type de compte : « Compte courant » (solde, versements, retraits, intérêts ; compte joint possible)." },
   ],
   '1.11.114': [
     { type:'new', text:"Sauvegarde complète (Réglages) : tous les modules, dans le dossier de votre choix, restauration d'un fichier et rappel si la dernière sauvegarde a plus de 10 jours. Date de la dernière sauvegarde dans le menu ☰." },

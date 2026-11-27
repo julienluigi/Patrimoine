@@ -4,7 +4,7 @@ import { loadClassic, fakeDocument } from '../helpers/load-classic.js';
 
 // Modales de compte et de position avec les VRAIES règles (js/features/account-rules.js).
 const rules = loadClassic('js/features/account-rules.js', {
-  exports: ['ACCOUNT_TYPES', 'ACCOUNT_TYPE_GROUPS', 'accountRulesProblems', 'allowedAssetTypes', 'assetTypeError', 'accTypeViolations', 'accCurrencyForType', 'assetTypeOptions', 'accJointAllowed', 'accTypeLimitError', 'accTypeLimitProblems', 'accDefaultName', 'accApplyTypeChange', 'accToReclassify', 'accTypeBlockReason'],
+  exports: ['ACCOUNT_TYPES', 'ACCOUNT_TYPE_GROUPS', 'accountRulesProblems', 'allowedAssetTypes', 'assetTypeError', 'accTypeViolations', 'accCurrencyForType', 'assetTypeOptions', 'accJointAllowed', 'accTypeLimitError', 'accTypeLimitProblems', 'accDefaultName', 'accApplyTypeChange', 'accToReclassify'],
 });
 const wealthF = loadClassic('js/features/wealth.js', { globals: { ...rules }, exports: ['accShare'] });
 const cashPockets = loadClassic('js/features/cash-pockets.js', { globals: { PU: globalThis.PU }, exports: ['cfStampCcy'] });
@@ -75,11 +75,12 @@ describe('modale de compte : devise et type', () => {
     chooseType('acc-type', CTO);
     expect(dom.els['acc-currency']).toMatchObject({ value: 'EUR', disabled: false, title: '' });
   });
-  it('création : types regroupés par catégorie, sans « Autre… » ni SCPI / métaux / compte courant / compte à terme', () => {
+  it('création : types regroupés par catégorie, sans « Autre… » ni SCPI / métaux / compte à terme, avec « Compte courant »', () => {
     setup(); api.openAccModal();
     const html = dom.els['acc-type'].innerHTML;
-    expect([...html.matchAll(/<optgroup label="([^"]+)">/g)].map(m => m[1])).toEqual(['Bourse et crypto', 'Assurance-vie et retraite', 'Livrets et épargne logement']);
-    for (const gone of ['Autre…', 'SCPI', 'Métaux', 'Compte courant', 'Compte à terme']) expect(html.includes(gone)).toBe(false);
+    expect([...html.matchAll(/<optgroup label="([^"]+)">/g)].map(m => m[1])).toEqual(['Bourse et crypto', 'Assurance-vie et retraite', 'Livrets et comptes courants']);
+    for (const gone of ['Autre…', 'SCPI', 'Métaux', 'Compte à terme']) expect(html.includes(gone)).toBe(false);
+    expect(html.includes('Compte courant')).toBe(true);
     expect(html.indexOf('LDDS')).toBeGreaterThan(html.indexOf('Épargne disponible'));
   });
   it('modification d un compte d un type retiré : son type est conservé dans « Type actuel »', () => {
@@ -112,7 +113,7 @@ describe('modale de compte : devise et type', () => {
     it('refuse un type qui rendrait interdites des positions existantes, sans rien modifier', () => {
       const a = acc({ holdings: [{ ticker: 'BTC', type: 'Crypto', country: '' }, { ticker: 'AAPL', type: 'Action', country: 'États-Unis' }] });
       edit(a, { type: PEA });
-      expect(toasts.at(-1)).toBe("2 positions non autorisées sur ce type (BTC, AAPL) : à vendre ou supprimer d'abord");
+      expect(toasts.at(-1)).toBe('Type incompatible avec : BTC, AAPL');
       expect(a.type).toBe(CTO);
       expect(calls.saved).toBe(0);
     });
