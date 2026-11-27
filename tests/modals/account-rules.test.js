@@ -4,8 +4,9 @@ import { loadClassic, fakeDocument } from '../helpers/load-classic.js';
 
 // Modales de compte et de position avec les VRAIES règles (js/features/account-rules.js).
 const rules = loadClassic('js/features/account-rules.js', {
-  exports: ['ACCOUNT_TYPES', 'ACCOUNT_TYPE_GROUPS', 'accountRulesProblems', 'allowedAssetTypes', 'assetTypeError', 'accTypeViolations', 'accCurrencyForType', 'assetTypeOptions', 'accJointAllowed', 'accTypeLimitError', 'accTypeLimitProblems', 'accDefaultName'],
+  exports: ['ACCOUNT_TYPES', 'ACCOUNT_TYPE_GROUPS', 'accountRulesProblems', 'allowedAssetTypes', 'assetTypeError', 'accTypeViolations', 'accCurrencyForType', 'assetTypeOptions', 'accJointAllowed', 'accTypeLimitError', 'accTypeLimitProblems', 'accDefaultName', 'accApplyTypeChange', 'accToReclassify', 'accTypeBlockReason'],
 });
+const wealthF = loadClassic('js/features/wealth.js', { globals: { ...rules }, exports: ['accShare'] });
 const cashPockets = loadClassic('js/features/cash-pockets.js', { globals: { PU: globalThis.PU }, exports: ['cfStampCcy'] });
 const taxEnv = loadClassic('js/features/tax-envelope.js', { exports: ['TAX_ENVELOPES', 'taxEnvelopeProblems'] });
 const accPerf = loadClassic('js/features/account-perf.js', { globals: { PU: globalThis.PU }, exports: ['accFlows'] });
@@ -31,15 +32,21 @@ describe('modale de compte : devise et type', () => {
     for (const id of ['acc-currency', 'rename-acc-currency']) dom.els[id] = { ...dom.document.getElementById(id), options: opts('EUR', 'USD', 'CHF', 'GBP', 'JPY') };
     api = loadClassic('js/modals/account.js', {
       globals: {
-        ...rules, ...cashPockets, ...taxEnv, ...savings, S, document: dom.document, PU: globalThis.PU, esc: s => String(s), setAccIcon() {}, closeIconPicker() {}, toast: m => toasts.push(m),
+        ...rules, ...wealthF, ...cashPockets, ...taxEnv, ...savings, S, document: dom.document, PU: globalThis.PU, esc: s => String(s), setAccIcon() {}, closeIconPicker() {}, toast: m => toasts.push(m),
         refreshMain() { calls.main++; }, saveAccounts() { calls.saved++; }, accTotal: () => 1, renderScreen() {}, _dayKey: () => '2026-11-24',
         registerModal() {}, openConfirm() {}, back() {}, go() {}, iconHtml: s => s,
       },
-      exports: ['openAccModal', 'openRenameAcc', 'syncAccCurrency'],
+      exports: ['openAccModal', 'openRenameAcc', 'syncAccCurrency', 'accShareHistoryNote'],
     });
   };
   const chooseType = (selId, type) => { dom.els[selId].value = type; dom.els[selId].onchange(); };
 
+  it("quote-part modifiée : message sur le saut de l'historique ; part inchangée : aucun message", () => {
+    setup();
+    expect(api.accShareHistoryNote(1, 0.5)).toMatch(/50 % de ce compte.*saut/);
+    expect(api.accShareHistoryNote(0.5, 1)).toMatch(/100 % de ce compte/);
+    expect(api.accShareHistoryNote(0.5, 0.5)).toBe('');
+  });
   it('rappel de l enveloppe fiscale sous la date d ouverture, selon le type choisi', () => {
     setup(); api.openAccModal();
     expect(dom.els['acc-type-env'].textContent).toBe('');
@@ -105,7 +112,7 @@ describe('modale de compte : devise et type', () => {
     it('refuse un type qui rendrait interdites des positions existantes, sans rien modifier', () => {
       const a = acc({ holdings: [{ ticker: 'BTC', type: 'Crypto', country: '' }, { ticker: 'AAPL', type: 'Action', country: 'États-Unis' }] });
       edit(a, { type: PEA });
-      expect(toasts.at(-1)).toBe('Type incompatible avec : BTC, AAPL');
+      expect(toasts.at(-1)).toBe("2 positions non autorisées sur ce type (BTC, AAPL) : à vendre ou supprimer d'abord");
       expect(a.type).toBe(CTO);
       expect(calls.saved).toBe(0);
     });
@@ -276,4 +283,5 @@ describe('modale de position : types d\'actifs du compte', () => {
       expect(h.country).toBe('Allemagne');
     });
   });
+
 });

@@ -10,6 +10,10 @@ taxEnvelopeProblems(ACCOUNT_TYPES).forEach(p => console.warn('[enveloppes fiscal
 if (typeof HOME_WATCH !== 'undefined') HOME_WATCH.accountLimits = () => accTypeLimitProblems(S.accounts)
   .map(x => ({ level: 'alert', go: 'comptes', text: `${x.count} comptes « ${x.type} »`, sub: x.max === 1 ? 'Un seul autorisé par personne : supprime le doublon ou passe-le en « Compte observateur »' : `Au plus ${x.max} par personne` }));
 
+// Accueil « À surveiller » (sous garde) : comptes dont le type n'est plus proposé, à reclasser (migration guidée)
+if (typeof HOME_WATCH !== 'undefined') HOME_WATCH.accountTypes = () => accToReclassify(S.accounts)
+  .map(a => ({ level: 'info', go: 'account', accountId: a.id, text: `« ${a.name} » à reclasser`, sub: `Le type « ${a.type} » n'est plus proposé` }));
+
 // Aligne le sélecteur de devise sur le type choisi (règle : accCurrencyForType). apply = true à la création, false pour un compte existant.
 function syncAccCurrency(typeSelId, curSelId, apply){
   const typeSel=document.getElementById(typeSelId), cur=document.getElementById(curSelId);
@@ -97,7 +101,6 @@ function openAccModal(){
   document.getElementById('acc-currency').value='EUR';
   syncAccCurrency('acc-type','acc-currency',true);   // la devise suit le type proposé par défaut
   document.getElementById('acc-obs-tog').classList.remove('on');
-  if(typeof linkedAccReset==='function') linkedAccReset();   // « Mettre à jour via un service » (js/screens/linked.js)
   document.getElementById('acc-modal-bg').classList.add('show');
   document.getElementById('acc-modal-sheet').classList.add('show');
   syncAccNamePlaceholder();
@@ -114,7 +117,7 @@ document.getElementById('acc-obs-tog').addEventListener('click',()=>{
   _accObserver=!_accObserver;
   document.getElementById('acc-obs-tog').classList.toggle('on',_accObserver);
 });
-document.getElementById('acc-submit').addEventListener('click',async()=>{
+document.getElementById('acc-submit').addEventListener('click',()=>{
   const type=readAccType('acc-type',ACCOUNT_TYPES[0]);
   const bank=document.getElementById('acc-bank').value.trim();
   const name=document.getElementById('acc-name').value.trim()||accDefaultName(type,bank,S.accounts);   // nom proposé si vide
@@ -136,7 +139,6 @@ document.getElementById('acc-submit').addEventListener('click',async()=>{
   }
   const acc={id,name,type,bank,currency,value:0,change1d:0,holdings:[],cashflows,observer:_accObserver,...(startDate?{startDate}:{}),...(share<100?{share}:{}),...(rate!=null?{rate}:{})};
   acc.value=accTotal(acc);
-  if(typeof linkedAccCreate==='function'&&await linkedAccCreate(acc)) return;   // compte lié à un service : créé seulement si le service répond (js/screens/linked.js)
   S.accounts.push(acc);
   closeAccModal();
   refreshMain();
@@ -151,7 +153,6 @@ function deleteAccount(accId){
   const acc=S.accounts.find(a=>a.id===accId); if(!acc) return;
   openConfirm(`Supprimer le compte "${acc.name}" ?`,()=>{
     S.accounts=S.accounts.filter(a=>a.id!==accId);
-    linkedKeysDelete(accId);   // clé d'un compte lié à un service : effacée de l'appareil avec le compte
     if(S.screen==='account'&&S.accountId===accId) back();
     refreshMain();
     toast('Compte supprimé');
@@ -207,6 +208,12 @@ document.getElementById('acc-action-del').addEventListener('click',()=>{
 
 
 // Part détenue saisie (compte joint) : vide → 100 ; refus (toast, null) hors de 1 à 100 %
+// Quote-part modifiée sur un compte existant : les points d'historique déjà enregistrés gardent l'ancienne part
+// (snapshots de totalWealth) ; la courbe d'évolution fait donc un saut le jour du changement. '' si la part ne change pas.
+function accShareHistoryNote(before, after){
+  if(Math.abs(before-after)<1e-9) return '';
+  return `Les totaux comptent maintenant ${Math.round(after*100)} % de ce compte. L'historique déjà enregistré n'est pas recalculé : la courbe d'évolution fera un saut à partir d'aujourd'hui.`;
+}
 function accShareInput(id){
   const raw=String(document.getElementById(id).value||'').trim();
   if(!raw) return 100;
@@ -219,6 +226,12 @@ function accShareInput(id){
 // EDIT ACCOUNT (nom, icône, type, devise)
 // ═══════════════════════════════════════════════
 let _renameAccId=null;
+// Compte concerné par le choix du type (js/modals/type-picker.js) : le compte modifié, ou un brouillon vide à la création
+function accTypePickerContext(selId){
+  if(selId==='rename-acc-type') return S.accounts.find(a=>a.id===_renameAccId)||null;
+  if(selId==='acc-type') return { id:null, type:'', holdings:[], observer:!!_accObserver };
+  return null;
+}
 function openRenameAcc(accId, currentName){
   _renameAccId=accId;
   const acc=S.accounts.find(a=>a.id===accId);
@@ -247,17 +260,14 @@ document.getElementById('rename-acc-close').addEventListener('click',closeRename
 document.getElementById('rename-acc-submit').addEventListener('click',()=>{
   const renamedId=_renameAccId;
   const acc=S.accounts.find(a=>a.id===renamedId); if(!acc) return;
+  const shareBefore=accShare(acc);   // avant tout changement de type ou de part (message sur l'historique)
   const newType0=readAccType('rename-acc-type',acc.type||ACCOUNT_TYPES[0]);
   const name=document.getElementById('rename-acc-input').value.trim()||accDefaultName(newType0,document.getElementById('rename-acc-bank').value,S.accounts.filter(a=>a.id!==acc.id));
-  if(newType0!==acc.type){ const limit=accTypeLimitError(S.accounts,newType0,acc.id,acc.observer); if(limit){toast(limit);return;} }
+  { const why=accTypeBlockReason(acc,newType0,S.accounts); if(why){toast(why);return;} }   // positions non autorisées, nombre maximal
   acc.name=name;
   // Changer de type ne doit pas rendre interdites des positions déjà saisies (un compte déjà non conforme reste modifiable sans changer de type)
   const newType=readAccType('rename-acc-type',acc.type||ACCOUNT_TYPES[0]);
-  if(newType!==acc.type){
-    const bad=accTypeViolations(acc,newType);
-    if(bad.length){toast('Type incompatible avec : '+bad.map(h=>h.ticker).join(', '));return;}
-  }
-  acc.type=newType;
+  accApplyTypeChange(acc,newType);   // garde l'ancien type s'il a été retiré de la liste (acc.formerType)
   acc.bank=document.getElementById('rename-acc-bank').value.trim();
   const startDate=document.getElementById('rename-acc-start').value||'';
   if(startDate&&startDate>_dayKey(Date.now())){toast("La date d'ouverture ne peut pas être dans le futur");return;}
@@ -266,6 +276,7 @@ document.getElementById('rename-acc-submit').addEventListener('click',()=>{
   if(rt.error){toast(rt.error);return;}
   if(rt.rate!=null) acc.rate=rt.rate; else delete acc.rate;
   if(share<100) acc.share=share; else delete acc.share;
+  const shareMsg=accShareHistoryNote(shareBefore, accShare(acc));
   if(startDate) acc.startDate=startDate; else delete acc.startDate;
   cfStampCcy(acc); // les apports anciens gardent leur devise : changer la devise du compte ne les réinterprète pas
   acc.currency=document.getElementById('rename-acc-currency').value||'EUR';
@@ -274,7 +285,7 @@ document.getElementById('rename-acc-submit').addEventListener('click',()=>{
   closeRenameAcc();
   refreshMain();
   if(S.screen==='account'&&S.accountId===renamedId) renderScreen('account');
-  toast(`Compte mis à jour ✓`);
+  toast(shareMsg?`Compte mis à jour ✓ ${shareMsg}`:`Compte mis à jour ✓`);
 });
 // Also submit on Enter key
 document.getElementById('rename-acc-input').addEventListener('keydown',e=>{

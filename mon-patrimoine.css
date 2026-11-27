@@ -612,8 +612,13 @@ html.bgshield #bg-shield{opacity:1;pointer-events:auto}
 .tp-sub{font-size:12px;color:var(--text2)}
 .tp-check{color:var(--tp);flex-shrink:0}
 
-/* Compte lié à un service (js/screens/linked.js) : pas d'ajout ni de suppression de position */
-.acc-synced .hold-add-btn,.acc-synced .hold-del-btn{display:none!important}
+/* Accueil : avertissement de données illisibles dans la carte Patrimoine net ; notes sous le camembert des grandes classes */
+.wl-warn{margin-top:8px;padding:7px 10px;border-radius:10px;background:rgba(255,120,120,.18);color:#fff;font-size:12px;font-weight:600;cursor:pointer}
+.pocket-note{margin-top:8px}
+.pocket-note-an{padding-bottom:10px}
 
-/* Compte lié : lien / récap de la création et étapes de la fenêtre « Mise à jour automatique » */
-#acc-link-api.hidden,#acc-link-recap.hidden,#ls-list.hidden,#ls-key.hidden,#ls-status.hidden,#ls-help.hidden,#ls-back.hidden,#ls-sync.hidden,#ls-del.hidden{display:none!important}
+/* Fenêtres longues (choix du type, création et modification d'un compte) : défilement au doigt dans la fenêtre, jamais derrière */
+#tp-sheet,#acc-modal-sheet,#rename-acc-sheet{max-height:92vh;max-height:92dvh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}
+.tp-row.off{opacity:.5;cursor:default}
+.tp-row.off .tp-badge{filter:grayscale(1)}
+.tp-why{color:var(--loss)}

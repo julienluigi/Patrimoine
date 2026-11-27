@@ -2,79 +2,21 @@
 // La clé doit correspondre à APP_VERSION (mon-patrimoine.js). Sans entrée pour la version courante, aucun popup.
 
 const CHANGELOG = {
-  '1.11.129': [
-    { type:'new', text:"Comptes : chaque compte est représenté par la pastille colorée de son type (PEA, AV, Livret A…), dans la liste, sur l'écran du compte et dans la recherche." },
-    { type:'new', text:"Plus de choix d'icône à la création d'un compte : le type suffit. Les livrets affichent leur taux dans la liste." },
-  ],
-  '1.11.128': [
-    { type:'new', text:"Type de compte : nouvelle fenêtre de choix, avec une couleur par catégorie (bourse, retraite, livrets), des noms courts et le taux des livrets." },
-  ],
-  '1.11.127': [
-    { type:'new', text:"Ajouter un compte : « Mettre à jour via un service », discret sous le bouton. Choisis le service (eToro pour l'instant), colle ta clé, c'est tout." },
-    { type:'new', text:"Compte lié : une petite pastille « eToro · il y a 5 min » remplace le bandeau ; touche-la pour synchroniser ou changer la clé." },
-  ],
-  '1.11.126': [
-    { type:'new', text:"Ajouter un compte : option « Lier à une API » (eToro), pour tous les types de comptes. La clé publique est pré-remplie, il suffit de coller la clé utilisateur." },
-    { type:'new', text:"Les comptes liés se mettent à jour avec les cours (bouton rafraîchir), par le même proxy." },
-  ],
-  '1.11.125': [
-    { type:'fix', text:"Type de compte : retour à la liste déroulante à sections." },
-  ],
-  '1.11.124': [
-    { type:'new', text:"Création d'un compte : nom proposé si tu n'en saisis pas (ex. « Livret A », « Compte-titres Boursorama »)." },
-    { type:'new', text:"Compte joint : la part n'est proposée que pour le compte-titres et l'assurance-vie ; PEA, livrets, PER… ont un seul titulaire et comptent à 100 %." },
-    { type:'new', text:"Un seul PEA, PEA-PME, Livret A, LDDS, LEP et Livret Jeune par personne (deux PEL / CEL) ; un doublon existant est signalé dans « À surveiller »." },
-    { type:'fix', text:"Livrets : le plafond se calcule sur le solde, intérêts compris, à la date du versement (22 000 € + 200 € d'intérêts → plus que 750 € à verser sur un Livret A)." },
-    { type:'fix', text:"Livret : seul le solde actuel est affiché en tête (plus de totaux versé / retiré)." },
-    { type:'fix', text:"Les messages longs passent à la ligne et restent dans l'écran ; le bouton « Intérêts » n'apparaît plus que sur les livrets." },
-  ],
-  '1.11.123': [
-    { type:'new', text:"Compte eToro synchronisé (lecture seule) : « Ou connecter un compte eToro » à la création d'un compte. Solde, positions et copies de traders mis à jour automatiquement ; clés gardées sur l'appareil uniquement." },
-  ],
-  '1.11.122': [
-    { type:'new', text:"Création d'un compte : types regroupés en trois catégories (Bourse et crypto, Assurance-vie et retraite, Épargne disponible). SCPI, métaux précieux, compte à terme, compte courant et « Autre… » retirés ; un compte existant garde son type." },
-  ],
-  '1.11.121': [
-    { type:'new', text:"Trois nouveaux thèmes dans Réglages : Sable (clair et chaud), Émeraude & or (sombre, esprit banque privée) et Graphite (noir pur, accent violet). Les graphiques prennent les couleurs du thème." },
-  ],
-  '1.11.120': [
-    { type:'new', text:"Livrets et comptes d'épargne simplifiés (Livret A, LDDS, LEP, Livret Jeune, PEL / CEL, compte à terme, compte courant) : solde, taux, intérêts estimés, versements, retraits et intérêts reçus — sans titres." },
-    { type:'new', text:"Plafond de versements respecté : un versement au-delà est refusé ; les intérêts, saisis à part, peuvent le dépasser. À la création, le solde au-delà du plafond est compté comme intérêts." },
-    { type:'new', text:"Accueil réordonné : patrimoine, évolution, répartition par classe d'actifs, puis « À surveiller »." },
-    { type:'fix', text:"Analyse de nouveau affichée quand les crédits dépassent les actifs (patrimoine net négatif) ; une classe nette négative est signalée." },
-  ],
-  '1.11.119': [
-    { type:'new', text:"Plusieurs crédits par bien immobilier (prêt principal, PTZ…), chacun avec son tableau d'amortissement, et assurance saisie en €/mois." },
-    { type:'new', text:"Module « Crédits » pour les autres crédits (consommation, auto, travaux…) : capital restant dû déduit du patrimoine net." },
-    { type:'new', text:"Quotes-parts : part d'un compte joint et part d'un bien (propriété et dette séparées) ; les totaux comptent votre part." },
-    { type:'new', text:"Enveloppes fiscales dans le compte : date des 5 ans du PEA, des 8 ans de l'assurance-vie, plafonds de versements des PEA et livrets." },
-    { type:'new', text:"Accueil cliquable (Comptes, Immobilier, Crédits) et bloc « À surveiller » : alertes, ordres, échéances, sauvegarde, positions non synchronisées, jalons fiscaux." },
-    { type:'new', text:"Simulation de remboursement anticipé (total ou partiel, indemnités au plafond légal ou du contrat) et comparaison « rembourser ou placer » avec rendement d'équilibre." },
-  ],
-  '1.11.118': [
-    { type:'fix', text:"Noms longs affichés en entier (légendes de l'Analyse, relevé des mouvements) ; marqueurs d'achat / vente entiers au bord du graphique d'un titre." },
-  ],
-  '1.11.117': [
-    { type:'fix', text:"Performance YTD : « — » au lieu d'un faux 0 % quand aucun cours au 31 décembre n'est connu (récupère l'historique depuis la fiche titre). En mode démo, les comptes ont des performances de démonstration." },
-  ],
-  '1.11.116': [
-    { type:'new', text:"Comptes, Recherche et Analyse titrés par leur nom ; la barre du bas reste affichée sur tous les modules." },
-    { type:'new', text:"Grande classe « Fonds euros », distincte de la Bourse (Accueil et Analyse)." },
-    { type:'new', text:"Liste des comptes plus lisible (sous-titre court, part du patrimoine indiquée) ; lignes de positions sans boutons : les actions (favori, mouvement, modifier, supprimer) sont dans la fiche du titre." },
-    { type:'fix', text:"Plus de « -0,00 % » en rouge ; pourcentages de l'Analyse toujours visibles ; étiquette du PRU qui ne chevauche plus le cours ; immobilier vide sans totaux à zéro ; nom du profil vide par défaut." },
-  ],
   '1.11.115': [
-    { type:'new', text:"Accueil : camembert des grandes classes d'actifs, qui ouvre l'Analyse." },
-    { type:'new', text:"Analyse : la projection du patrimoine (1 à 20 ans) y est maintenant, au lieu de l'écran DCA." },
-    { type:'new', text:"Ordres : affichage plus compact, nom du titre, montant total et écart restant jusqu'au prix limite ou au seuil d'alerte." },
-    { type:'new', text:"Menu ☰ : date de la dernière sauvegarde toujours visible ; un toucher sauvegarde." },
-    { type:'fix', text:"Écrans de module (DCA, Ordres, Immobilier, Assistant, Réglages, Non synchro) : titrés par leur nom, sans « Retour »." },
+    { type:'fix', text:"Changer le type d'un compte : la liste des types s'ouvrait derrière la fiche « Modifier » et bloquait l'écran. Elle la remplace maintenant le temps du choix, défile au doigt jusqu'au dernier type, puis la fiche revient avec le type choisi." },
+    { type:'fix', text:"Un type impossible pour ce compte est grisé avec sa raison (ex. un compte-titres avec des actions ne peut pas devenir un Livret A ; un seul Livret A par personne) ; les autres types restent accessibles. Un compte vide peut prendre n'importe quel type." },
   ],
   '1.11.114': [
-    { type:'new', text:"Sauvegarde complète (Réglages) : tous les modules, enregistrée dans le dossier de votre choix (OneDrive, Drive, Fichiers…), restauration d'un fichier, et rappel à l'ouverture si la dernière sauvegarde a plus de 10 jours." },
-    { type:'new', text:"Non synchro : positions dont le cours est trop ancien ou de date inconnue, avec pastille ; option « Cours saisi à la main »." },
-    { type:'new', text:"Écran d'un compte allégé : la rangée P&L Total / Performance / Variation J est retirée." },
-    { type:'fix', text:"Menu ☰ accessible depuis tous les écrans ; un seul nom par module ; mise à jour qui recharge proprement l'application." },
+    { type:'new', text:"Sauvegarde complète (Réglages) : tous les modules, dans le dossier de votre choix, restauration d'un fichier et rappel si la dernière sauvegarde a plus de 10 jours. Date de la dernière sauvegarde dans le menu ☰." },
+    { type:'new', text:"Accueil : camembert des grandes classes d'actifs (dont « Fonds euros », distincte de la Bourse), lignes cliquables (Comptes, Immobilier, Crédits) et bloc « À surveiller » : alertes, ordres, échéances, sauvegarde, positions non synchronisées, jalons fiscaux." },
+    { type:'new', text:"Crédits : plusieurs crédits par bien immobilier (assurance en €/mois), module « Crédits » pour les autres crédits, simulation de remboursement anticipé et comparaison « rembourser ou placer »." },
+    { type:'new', text:"Quotes-parts : part d'un compte joint (compte-titres, assurance-vie) et part d'un bien (propriété et dette séparées) ; les totaux comptent votre part." },
+    { type:'new', text:"Enveloppes fiscales dans le compte : 5 ans du PEA, 8 ans de l'assurance-vie, plafonds des PEA et livrets." },
+    { type:'new', text:"Livrets et épargne logement simplifiés : solde, taux, intérêts estimés, versements, retraits et intérêts ; plafond respecté à la date du versement." },
+    { type:'new', text:"Types de comptes en trois catégories colorées ; chaque compte est représenté par la pastille de son type. Un seul PEA, Livret A… par personne. Nom proposé si vide." },
+    { type:'new', text:"Comptes dont le type n'est plus proposé (SCPI, métaux précieux, compte à terme, compte courant, type libre) : rien ne change tout seul ; un bandeau et « À surveiller » proposent de choisir un nouveau type ou de garder l'ancien." },
+    { type:'new', text:"Analyse : projection du patrimoine (1 à 20 ans). Thèmes Sable, Émeraude & or et Graphite. Non synchro : positions au cours trop ancien et cours saisi à la main." },
+    { type:'fix', text:"Modules titrés par leur nom avec la barre du bas partout ; écrans Compte, Ordres, positions et liste des comptes allégés ; plus de « -0,00 % » ; YTD « — » sans cours au 31/12 ; noms longs entiers ; messages longs sur plusieurs lignes ; Analyse affichée même si le patrimoine net est négatif." },
   ],
   '1.11.113': [
     { type:'new', text:"Ordres et alertes (menu ☰ ou barre du bas) : ordres limites en cours avec confirmation d'exécution (ajoute le mouvement au compte) et alertes de prix, séparés entre mode démo et réel, avec pastille de compteur." },
