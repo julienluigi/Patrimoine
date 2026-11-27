@@ -2,6 +2,9 @@
 // La clé doit correspondre à APP_VERSION (mon-patrimoine.js). Sans entrée pour la version courante, aucun popup.
 
 const CHANGELOG = {
+  '1.11.138': [
+    { type:'fix', text:"Ajouter une position : la liste des cotations trouvées en ligne défile jusqu'au bout, même clavier ouvert, et la fiche défile sur les petits écrans." },
+  ],
   '1.11.137': [
     { type:'new', text:"Ajouter une position : « Chercher en ligne » trouve la bonne cotation (bourse ou crypto, avec place, devise et cours). Le titre a son cours dès sa création." },
     { type:'new', text:"Non synchro : touchez un titre pour trouver son cours ; le choix vaut partout dans l'appli. Sans cotation en ligne : cours saisi à la main, avec un rappel s'il a plus d'un mois." },
