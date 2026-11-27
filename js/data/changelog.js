@@ -2,9 +2,9 @@
 // La clé doit correspondre à APP_VERSION (mon-patrimoine.js). Sans entrée pour la version courante, aucun popup.
 
 const CHANGELOG = {
-  '1.11.134': [
-    { type:'new', text:"Sauvegarde : choisissez où l'enregistrer. Sur téléphone, « Envoyer ou partager » ouvre OneDrive, Gmail, Drive… ; sur ordinateur, « Choisir un dossier » ; partout, « Télécharger »." },
-    { type:'new', text:"Ajouter un compte : « Mettre à jour via un service » (eToro, lecture seule)." },
+  '1.11.135': [
+    { type:'new', text:"Non synchro : touchez un titre pour trouver son cours (nom, ticker ou ISIN ; cryptos comprises). Le choix vaut pour toutes les positions de ce titre, partout dans l'appli. Sans cotation en ligne : saisissez le cours à la main." },
+    { type:'new', text:"Sauvegarde : choisissez où l'enregistrer (OneDrive, mail, dossier, téléchargement)." },
   ],
   '1.11.122': [
     { type:'fix', text:"Graphiques : si l'application se lance dans une fenêtre pas encore dimensionnée, la courbe ne devient plus invisible (largeur minimale garantie)." },
