@@ -2,10 +2,14 @@
    Cloudflare Worker — proxy "patrimoine-prices"
    Déployé sur : https://patrimoine-prices.al-the-best.workers.dev
 
-   Trois routes :
+   Quatre routes :
    1) ?symbols=MC.PA,AAPL,EURUSD=X      → cours spot Yahoo (v7 quote, crumb auth)
    2) ?chart=MC.PA&range=5y&interval=1d → historique Yahoo (v8 chart)
    3) ?search=FR0013412269              → recherche Yahoo (nom/ISIN → symbole, v1 search)
+   4) ?api=<service>&call=<appel>[&…]   → comptes liés (lecture seule), table LINKED_APIS ci-dessous
+      ex. ?api=etoro&call=pnl, ?api=etoro&call=instruments&ids=1001,100000
+      Seuls les appels déclarés passent. En-têtes de clés transmis tels quels : ni stockés, ni journalisés, ni mis en cache.
+      Ajouter un service = une entrée dans LINKED_APIS (et le module correspondant dans l'appli).
 
    La récupération crumb/cookie (cache 5 min) est factorisée dans getCrumb()
    et partagée par les trois routes. Les v8 chart et v1 search n'ont pas besoin
@@ -23,6 +27,39 @@ const CORS = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/
 // Cache module-level : persiste entre les requêtes d'une même instance
 let _crumbCache = { cookie: '', crumb: '', expires: 0 };
 
+// Comptes liés : services et appels autorisés (lecture seule). Pour chaque appel, path(url) → chemin, ou null si paramètres invalides.
+const LINKED_APIS = {
+  etoro: {
+    base: 'https://public-api.etoro.com/api/v1',
+    headers: ['x-api-key', 'x-user-key', 'x-request-id'],
+    calls: {
+      pnl: () => '/trading/info/real/pnl',
+      instruments: url => {
+        const ids = (url.searchParams.get('ids') || '').split(',').filter(x => /^\d+$/.test(x)).slice(0, 100);
+        return ids.length ? '/market-data/instruments?instrumentIds=' + ids.join(',') : null;
+      },
+    },
+  },
+};
+const LINKED_HEADERS = [...new Set(Object.values(LINKED_APIS).flatMap(a => a.headers))];
+const LINKED_CORS = { ...CORS, 'Access-Control-Allow-Headers': LINKED_HEADERS.join(', '), 'Access-Control-Allow-Methods': 'GET, OPTIONS', 'Access-Control-Expose-Headers': 'Retry-After', 'Cache-Control': 'no-store' };
+
+async function linkedRoute(req, url) {
+  const api = LINKED_APIS[url.searchParams.get('api')];
+  const call = api && Object.prototype.hasOwnProperty.call(api.calls, url.searchParams.get('call')) && api.calls[url.searchParams.get('call')];
+  const path = call && call(url);
+  if (!path) return new Response(JSON.stringify({ error: 'api/call inconnu ou paramètres invalides' }), { status: 400, headers: LINKED_CORS });
+  const h = {};
+  for (const k of api.headers) { const v = req.headers.get(k); if (v) h[k] = v; }
+  try {
+    const r = await fetch(api.base + path, { headers: h });
+    const out = { ...LINKED_CORS }; const ra = r.headers.get('Retry-After'); if (ra) out['Retry-After'] = ra;
+    return new Response(await r.text(), { status: r.status, headers: out });
+  } catch (e) {
+    return new Response(JSON.stringify({ error: e.message }), { status: 502, headers: LINKED_CORS });
+  }
+}
+
 async function getCrumb(forceRefresh) {
   if (forceRefresh || Date.now() > _crumbCache.expires) {
     const fcResp = await fetch('https://fc.yahoo.com', { headers: { 'User-Agent': UA } });
@@ -39,9 +76,13 @@ async function getCrumb(forceRefresh) {
   return _crumbCache;
 }
 
-export default {
+const routes = {   // exporté plus bas, derrière le contrôle des origines
   async fetch(req) {
     const url = new URL(req.url);
+
+    // ── ROUTE COMPTES LIÉS : pré-vol CORS des en-têtes de clés, puis appel ──
+    if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: LINKED_CORS });
+    if (url.searchParams.has('api')) return linkedRoute(req, url);
 
     // ── ROUTE HISTORIQUE (v8 chart) ──
     const chart = url.searchParams.get('chart');
@@ -84,7 +125,7 @@ export default {
 
     // ── ROUTE COURS SPOT (v7 quote, inchangée) ──
     const symbols = url.searchParams.get('symbols');
-    if (!symbols) return new Response(JSON.stringify({ error: 'symbols, chart or search required' }), { status: 400, headers: CORS });
+    if (!symbols) return new Response(JSON.stringify({ error: 'symbols, chart, search or api required' }), { status: 400, headers: CORS });
     try {
       const fetchQuote = async (crumb, cookie) => {
         const r = await fetch(
@@ -113,4 +154,34 @@ export default {
       return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: CORS });
     }
   }
+};
+
+/* ── ORIGINES AUTORISÉES ──────────────────────────────────────────────────
+   Seules les pages de l'application peuvent appeler ce worker depuis un navigateur : un autre site
+   reçoit 403 et ne consomme pas le quota Yahoo. La réponse renvoie l'origine appelante (au lieu de *).
+   Sans en-tête Origin (outil en ligne de commande, test) : accepté, le navigateur n'est pas en jeu.
+   Ajouter ici toute nouvelle adresse de l'application. */
+const ALLOWED_ORIGINS = [
+  'https://alexandrebourgoin.github.io',   // application
+  'https://julienluigi.github.io',         // aperçu de Julien
+];
+const LOCAL_ORIGIN = /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;   // développement
+
+function originAllowed(origin) {
+  return !origin || ALLOWED_ORIGINS.includes(origin) || LOCAL_ORIGIN.test(origin);
+}
+
+export default {
+  async fetch(req, env, ctx) {
+    const origin = req.headers.get('Origin');
+    if (!originAllowed(origin)) {
+      return new Response(JSON.stringify({ error: 'origine non autorisée' }), { status: 403, headers: { 'Content-Type': 'application/json', 'Vary': 'Origin' } });
+    }
+    const res = await routes.fetch(req, env, ctx);
+    if (!origin) return res;
+    const out = new Response(res.body, res);
+    out.headers.set('Access-Control-Allow-Origin', origin);
+    out.headers.append('Vary', 'Origin');
+    return out;
+  },
 };

@@ -13,7 +13,7 @@
 // ⚠️ Ce numéro EST le 3e chiffre de la version applicative : patrimoine-vNN ↔ 1.11.NN.
 // Le bumper ici oblige à mettre APP_VERSION à jour dans mon-patrimoine.js (et inversement).
 // L'écran Réglages → À propos affiche le cache réellement actif et signale un écart.
-const CACHE = 'patrimoine-v131';
+const CACHE = 'patrimoine-v132';
 const SHELL = [
   './index.html',
   './mon-patrimoine.html',
@@ -34,6 +34,8 @@ const SHELL = [
   './js/core/back-handler.js',
   './js/core/app-update.js',
   './js/services/prices.js',
+  './js/services/linked.js',
+  './js/services/etoro.js',
   './js/services/csv-import.js',
   './js/features/lock.js',
   './js/features/dca-calc.js',
@@ -78,6 +80,7 @@ const SHELL = [
   './js/screens/search.js',
   './js/screens/account.js',
   './js/screens/savings.js',
+  './js/screens/linked.js',
   './js/screens/stock.js',
   './js/screens/analysis.js',
   './js/screens/assistant.js',
