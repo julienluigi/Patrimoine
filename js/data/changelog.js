@@ -2,6 +2,10 @@
 // La clé doit correspondre à APP_VERSION (mon-patrimoine.js). Sans entrée pour la version courante, aucun popup.
 
 const CHANGELOG = {
+  '1.11.131': [
+    { type:'fix', text:"Changer le type d'un compte : la liste des types s'ouvrait derrière la fiche « Modifier » et bloquait l'écran. Elle la remplace maintenant le temps du choix, défile au doigt jusqu'au dernier type, puis la fiche revient avec le type choisi." },
+    { type:'fix', text:"Un type impossible pour ce compte est grisé avec sa raison (ex. un compte-titres avec des actions ne peut pas devenir un Livret A ; un seul Livret A par personne) ; les autres types restent accessibles. Un compte vide peut prendre n'importe quel type." },
+  ],
   '1.11.115': [
     { type:'fix', text:"Changer le type d'un compte : la liste des types s'ouvrait derrière la fiche « Modifier » et bloquait l'écran. Elle la remplace maintenant le temps du choix, défile au doigt jusqu'au dernier type, puis la fiche revient avec le type choisi." },
     { type:'fix', text:"Un type impossible pour ce compte est grisé avec sa raison (ex. un compte-titres avec des actions ne peut pas devenir un Livret A ; un seul Livret A par personne) ; les autres types restent accessibles. Un compte vide peut prendre n'importe quel type." },
