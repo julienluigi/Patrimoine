@@ -2,9 +2,9 @@
 // La clé doit correspondre à APP_VERSION (mon-patrimoine.js). Sans entrée pour la version courante, aucun popup.
 
 const CHANGELOG = {
-  '1.11.136': [
+  '1.11.137': [
     { type:'new', text:"Ajouter une position : « Chercher en ligne » trouve la bonne cotation (bourse ou crypto, avec place, devise et cours). Le titre a son cours dès sa création." },
-    { type:'new', text:"Non synchro : touchez un titre pour trouver son cours ; le choix vaut partout dans l'appli. Sans cotation en ligne : cours saisi à la main." },
+    { type:'new', text:"Non synchro : touchez un titre pour trouver son cours ; le choix vaut partout dans l'appli. Sans cotation en ligne : cours saisi à la main, avec un rappel s'il a plus d'un mois." },
     { type:'new', text:"Sauvegarde : choisissez où l'enregistrer (OneDrive, mail, dossier, téléchargement)." },
   ],
   '1.11.122': [
